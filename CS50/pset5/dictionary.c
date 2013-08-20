@@ -111,7 +111,7 @@ bool check(const char* word)
     char work[LENGTH+1];
     strcpy(work, word);
     
-    // to lower - FOR SOME REASON THIS MORE EFFICIENT THAN BITWISE OPERATION (oring 1<<5), what's wrong?
+    // to lower - FOR SOME REASON THIS MORE EFFICIENT THAN BITWISE OPERATION, what's wrong?
     for (int a = 0; work[a]; a++)
             work[a] = tolower(work[a]);
 
