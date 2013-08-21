@@ -1,0 +1,5 @@
+# Ignore unneeded files
+
+*.swp
+.DS_Store
+dict_*
