@@ -20,7 +20,7 @@
 
 
 typedef struct node {
-    char word[LENGTH + 1];   // ideally dynamically allocate syze for given input word
+    char word[LENGTH + 1];   // ideally would dynamically allocate size but this is ok 
     struct node* next;
 }
 node;
@@ -29,10 +29,10 @@ node* HASH_TABLE[HASHTABLE_SIZE];  // hash table is an array of pointers (to lin
 
 int count = 0; // counter for load to help implementation of size()
 
-/* hash function returns an integer that represents the proper index of HASH_TABLE pointer array
- * hash 1 is naive implementation based on 1st character
- * hash 2 is "slash_hash" - bad times, so must be improperly implemented? Will check
- * hash 3 is djb2
+/* 
+ * hash function returns an integer that represents the proper index of HASH_TABLE pointer array
+ * hash 1 is naive implementation based on 1st character - lots of collisions, slow runtime
+ * hash 2 is djb2 AND IS THE CODE CURRENTLY RUN, apparently not as efficient as murmur, but ok
 */
 
 int hash(const char* str)
@@ -57,16 +57,8 @@ int hash(const char* word_in) {
     return index;
 }
 
-// hash 2
-int hash(const char *s)  {
-    int h; 
-    int u[8];
-    int i=0; h=strlen(s);
-    while (*s) { u[i%8] += *s + i + (*s >> ((h/(i+1)) % 5)); s++; i++; }
-    return (h%HASHTABLE_SIZE); //32-bit
-}
 
-// hash 3
+// hash 2
 int hash(const char* str)
 {
 	int h=5381;
@@ -95,11 +87,11 @@ node* create_node(void) {
 
 
 /**
- * Returns true if word is in dictionary else false.
+ * Check Funciton:  Returns true if word is in dictionary else false.
  */
 bool check(const char* word)
 {
-    // TODO
+
     
     /*
     * check reads in words from text then sees if it is in linked list at proper HASH_TABLE address
@@ -115,7 +107,8 @@ bool check(const char* word)
     for (int a = 0; work[a]; a++)
         work[a] = work[a] | 0x20;
 
-    /* creates node pointer toward same address as appropriate hash_table pointer, 
+    /* 
+     * creates node pointer toward same address as appropriate hash_table pointer, 
      * inserts word into hashtable addressed linked list        
     */
     node* cursor = HASH_TABLE[(hash(work))];
@@ -142,7 +135,6 @@ bool check(const char* word)
  */
 bool load(const char* dictionary)
 {
-    // TODO
     
     FILE* fp = fopen(dictionary, "r");
      if (fp == NULL) {
@@ -151,7 +143,8 @@ bool load(const char* dictionary)
      }
      // read entire dictionary
      while (feof(fp) == 0) {
-        /*load individual \n delimited words into fixed size buffer char array word[LENGTH+1], when word ends load from buffer to hashtable
+        /*
+         * load individual '\n' delimited words into fixed size buffer char array word[LENGTH+1], when word ends load from buffer to hashtable
          * load using fscanf - stop at \n, copy to proper node->word pointed to by correct pointer based on check of first letter
          * ideally dynamically allocate buffer size then load that array into hash
         */
@@ -181,7 +174,6 @@ bool load(const char* dictionary)
  */
 unsigned int size(void)
 {
-    // TODO
     if (count > 0)
         return count;
     else
@@ -193,7 +185,6 @@ unsigned int size(void)
  */
 bool unload(void)
 {
-    // TODO
     
     for (int i = 0; i < HASHTABLE_SIZE; i++) {
        node* cursor = HASH_TABLE[i];
