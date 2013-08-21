@@ -101,19 +101,19 @@ bool check(const char* word)
 {
     // TODO
     
-    /**
+    /*
     * check reads in words from text then sees if it is in linked list at proper HASH_TABLE address
     * so, hash the word then linear probe with strcomp at each node along the list
-    *
     */
    
    // had to copy const char word to editable char 
     char work[LENGTH+1];
     strcpy(work, word);
     
-    // to lower - FOR SOME REASON THIS MORE EFFICIENT THAN BITWISE OPERATION, what's wrong?
+    // to lower - Bitwise operator more efficient than calling tolower funciton: 
+    // ~ %5 bump in check speed for ~ 1.2 million word check
     for (int a = 0; work[a]; a++)
-            work[a] = tolower(work[a]);
+        work[a] = work[a] | 0x20;
 
     /* creates node pointer toward same address as appropriate hash_table pointer, 
      * inserts word into hashtable addressed linked list        
